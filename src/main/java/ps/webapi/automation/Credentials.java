@@ -6,5 +6,5 @@ public class Credentials {
 
     public static String EMAIL = "your@email.com";
 
-    public static String PASSWORD = "yourPasssword";
+    public static String PASSWORD = "yourPassword";
 }
