@@ -1,8 +1,8 @@
 package ps.webapi.automation;
 
-import org.apache.http.Header;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.entity.ContentType;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.core5.http.ContentType;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -12,19 +12,14 @@ import static org.testng.Assert.assertTrue;
 
 public class ResponseHeaders extends BaseClass {
 
-
     @Test
     public void contentTypeIsJson() throws IOException {
 
-       HttpGet get = new HttpGet(BASE_ENDPOINT);
+        HttpGet get = new HttpGet(BASE_ENDPOINT);
 
-       response = client.execute(get);
+        String contentType = client.execute(get, response -> response.getEntity().getContentType());
 
-       Header contentType = response.getEntity().getContentType();
-       assertEquals(contentType.getValue(), "application/json; charset=utf-8");
-
-       ContentType ct = ContentType.getOrDefault(response.getEntity());
-       assertEquals(ct.getMimeType(), "application/json");
+        assertEquals(contentType, "application/json; charset=utf-8");
     }
 
     @Test
@@ -32,9 +27,7 @@ public class ResponseHeaders extends BaseClass {
 
         HttpGet get = new HttpGet(BASE_ENDPOINT);
 
-        response = client.execute(get);
-
-        String headerValue = ResponseUtils.getHeader(response, "Server");
+        String headerValue = client.execute(get, response -> ResponseUtils.getHeader(response, "Server"));
 
         assertEquals(headerValue, "GitHub.com");
     }
@@ -44,9 +37,7 @@ public class ResponseHeaders extends BaseClass {
 
         HttpGet get = new HttpGet(BASE_ENDPOINT);
 
-        response = client.execute(get);
-
-        String limitVal = ResponseUtils.getHeaderJava8Way(response, "X-RateLimit-Limit");
+        String limitVal = client.execute(get, response -> ResponseUtils.getHeaderJava8Way(response, "X-RateLimit-Limit"));
         assertEquals(limitVal, "60");
     }
 
@@ -55,11 +46,8 @@ public class ResponseHeaders extends BaseClass {
 
         HttpGet get = new HttpGet(BASE_ENDPOINT);
 
-        response = client.execute(get);
-
-        boolean tagIsPresent = ResponseUtils.headerIsPresent(response, "ETag");
+        boolean tagIsPresent = client.execute(get, response -> ResponseUtils.headerIsPresent(response, "ETag"));
 
         assertTrue(tagIsPresent);
-
     }
 }

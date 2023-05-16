@@ -1,9 +1,10 @@
 package ps.webapi.automation;
 
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.core5.http.ParseException;
 import ps.webapi.automation.entities.NotFound;
 import ps.webapi.automation.entities.RateLimit;
 import ps.webapi.automation.entities.User;
-import org.apache.http.client.methods.HttpGet;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -17,9 +18,7 @@ public class BodyTestWithJackson extends BaseClass {
 
         HttpGet get = new HttpGet(BASE_ENDPOINT + "/users/andrejss88");
 
-        response = client.execute(get);
-
-        User user = ResponseUtils.unmarshallGeneric(response, User.class);
+        User user =  client.execute(get, response -> ResponseUtils.unmarshallGeneric(response, User.class));
 
         assertEquals(user.getLogin(), "andrejss88");
     }
@@ -29,9 +28,7 @@ public class BodyTestWithJackson extends BaseClass {
 
         HttpGet get = new HttpGet(BASE_ENDPOINT + "/users/andrejss88");
 
-        response = client.execute(get);
-
-        User user = ResponseUtils.unmarshallGeneric(response, User.class);
+        User user =  client.execute(get, response -> ResponseUtils.unmarshallGeneric(response, User.class));
 
         assertEquals(user.getId(), 11834443);
     }
@@ -41,9 +38,7 @@ public class BodyTestWithJackson extends BaseClass {
 
         HttpGet get = new HttpGet(BASE_ENDPOINT + "/nonexistingendpoint");
 
-        response = client.execute(get);
-
-        NotFound notFoundMessage = ResponseUtils.unmarshallGeneric(response, NotFound.class);
+        NotFound notFoundMessage =  client.execute(get, response -> ResponseUtils.unmarshallGeneric(response, NotFound.class));
 
         assertEquals(notFoundMessage.getMessage(), "Not Found");
     }
@@ -53,14 +48,9 @@ public class BodyTestWithJackson extends BaseClass {
 
         HttpGet get = new HttpGet(BASE_ENDPOINT + "/rate_limit");
 
-        response = client.execute(get);
-
-        RateLimit rateLimits = ResponseUtils.unmarshallGeneric(response, RateLimit.class);
+        RateLimit rateLimits =  client.execute(get, response -> ResponseUtils.unmarshallGeneric(response, RateLimit.class));
 
         assertEquals(rateLimits.getCoreLimit(), 60);
         assertEquals(rateLimits.getSearchLimit(), "10");
-
     }
-
-
 }

@@ -1,16 +1,15 @@
 package ps.webapi.automation;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.http.HttpHeaders;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
+import org.apache.hc.client5.http.classic.methods.HttpDelete;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.utils.Base64;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpHeaders;
+import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 public class DeleteAndPost extends BaseClass {
@@ -21,9 +20,7 @@ public class DeleteAndPost extends BaseClass {
         HttpDelete request = new HttpDelete("https://api.github.com/repos/andrejss88/deleteme");
 
         request.setHeader(HttpHeaders.AUTHORIZATION, "token " + Credentials.TOKEN);
-        response = client.execute(request);
-
-        int actualStatusCode = response.getStatusLine().getStatusCode();
+        int actualStatusCode = client.execute(request, response -> response.getCode());
 
         Assert.assertEquals(actualStatusCode, 204);
     }
@@ -49,9 +46,7 @@ public class DeleteAndPost extends BaseClass {
         request.setEntity(new StringEntity(json, ContentType.APPLICATION_JSON));
 
         // Send
-        response = client.execute(request);
-
-        int actualStatusCode = response.getStatusLine().getStatusCode();
+        int actualStatusCode = client.execute(request, response -> response.getCode());
         Assert.assertEquals(actualStatusCode, 201);
     }
 
@@ -70,9 +65,7 @@ public class DeleteAndPost extends BaseClass {
         request.setEntity(new StringEntity(json, ContentType.APPLICATION_JSON));
 
         // Send
-        response = client.execute(request);
-
-        int actualStatusCode = response.getStatusLine().getStatusCode();
+        int actualStatusCode = client.execute(request, response -> response.getCode());
         Assert.assertEquals(actualStatusCode, 201);
     }
 }

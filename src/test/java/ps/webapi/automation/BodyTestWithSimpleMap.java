@@ -1,7 +1,8 @@
 package ps.webapi.automation;
 
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.core5.http.ParseException;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -19,9 +20,7 @@ public class BodyTestWithSimpleMap extends BaseClass {
 
         HttpGet get = new HttpGet(BASE_ENDPOINT + "/users/andrejss88");
 
-        response = client.execute(get);
-
-        String jsonBody = EntityUtils.toString(response.getEntity());
+        String jsonBody =  client.execute(get, response -> EntityUtils.toString(response.getEntity()));
 
         JSONObject jsonObject = new JSONObject(jsonBody);
 
@@ -35,9 +34,7 @@ public class BodyTestWithSimpleMap extends BaseClass {
 
         HttpGet get = new HttpGet(BASE_ENDPOINT + "/users/andrejss88");
 
-        response = client.execute(get);
-
-        String jsonBody = EntityUtils.toString(response.getEntity());
+        String jsonBody =  client.execute(get, response -> EntityUtils.toString(response.getEntity()));
 
         JSONObject jsonObject = new JSONObject(jsonBody);
 

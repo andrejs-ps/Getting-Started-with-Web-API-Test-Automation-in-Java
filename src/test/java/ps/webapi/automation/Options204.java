@@ -1,6 +1,6 @@
 package ps.webapi.automation;
 
-import org.apache.http.client.methods.HttpOptions;
+import org.apache.hc.client5.http.classic.methods.HttpOptions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -15,9 +15,7 @@ public class Options204 extends BaseClass {
         String expectedReply = "GET, POST, PATCH, PUT, DELETE";
 
         HttpOptions request = new HttpOptions(BASE_ENDPOINT);
-        response = client.execute(request);
-
-        String actualValue = ResponseUtils.getHeader(response, header);
+        String actualValue = client.execute(request, response -> ResponseUtils.getHeader(response, header));
 
         Assert.assertEquals(actualValue, expectedReply);
     }

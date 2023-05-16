@@ -1,6 +1,6 @@
 package ps.webapi.automation;
 
-import org.apache.http.client.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -14,9 +14,7 @@ public class Get200 extends BaseClass{
 
         HttpGet get = new HttpGet(BASE_ENDPOINT + "/rate_limit");
 
-        response = client.execute(get);
-
-        int actualStatus = response.getStatusLine().getStatusCode();
+        int actualStatus = client.execute(get, response -> response.getCode());
 
         assertEquals(actualStatus, 200);
     }
@@ -26,9 +24,7 @@ public class Get200 extends BaseClass{
 
         HttpGet get = new HttpGet(BASE_ENDPOINT + "/search/repositories?q=java");
 
-        response = client.execute(get);
-
-        int actualStatus = response.getStatusLine().getStatusCode();
+        int actualStatus = client.execute(get, response -> response.getCode());
 
         assertEquals(actualStatus, 200);
     }

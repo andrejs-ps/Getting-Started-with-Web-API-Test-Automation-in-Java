@@ -1,6 +1,7 @@
 package ps.webapi.automation;
 
-import org.apache.http.client.methods.HttpGet;
+
+import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -23,9 +24,7 @@ public class Get401 extends BaseClass{
 
         HttpGet get = new HttpGet(BASE_ENDPOINT + endpoint);
 
-        response = client.execute(get);
-
-        int actualStatus = response.getStatusLine().getStatusCode();
+        int actualStatus = client.execute(get, response -> response.getCode());
 
         assertEquals(actualStatus, 401);
     }
